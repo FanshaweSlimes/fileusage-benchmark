@@ -2,7 +2,7 @@
 \file:		main.cpp
 \author:	Jared Gajulin
 \date:		Mar 19, 2024
-\version:	1.0.0
+\version:	1.1.0
 \brief:		Benchmarks the fileusage binary against the provided demo binary. Files must be named fileusage.exe & fileusage-demo.exe respectively.
 */
 
@@ -14,9 +14,11 @@
 
 #include <cstdlib>
 
-void benchmark(std::wstringstream& wss, const wchar_t* application_name, const int argc, const std::string& root_dir, const bool no_cout = false)
+bool benchmark(std::wstringstream& wss, const wchar_t* application_name, const int argc, const std::string& root_dir, const bool no_cout = false, const bool cold_cache = false)
 {
-	if (!no_cout)
+	if (cold_cache) std::cout << "Putting files into system file cache." << '\n';
+
+	if (!no_cout && !cold_cache)
 		wss << application_name << ":\n";
 
 	STARTUPINFO si{};
@@ -59,9 +61,10 @@ void benchmark(std::wstringstream& wss, const wchar_t* application_name, const i
 		&pi  // lpProcessInformation
 	))
 	{
-		wss << "\t" << application_name << " not found.\n\n";
+		if (!cold_cache)
+			wss << "\t" << application_name << " not found.\n\n";
 
-		return;
+		return false;
 	}
 
 	WaitForSingleObject(pi.hProcess, INFINITE);
@@ -70,6 +73,8 @@ void benchmark(std::wstringstream& wss, const wchar_t* application_name, const i
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 	CloseHandle(h_null);
+
+	if (cold_cache) return true;
 
 	const auto diff = end_time - start_time;
 
@@ -98,6 +103,8 @@ void benchmark(std::wstringstream& wss, const wchar_t* application_name, const i
 	{
 		benchmark(wss, application_name, argc, root_dir, true);
 	}
+
+	return true;
 }
 
 int main(const int argc, const char** argv)
@@ -113,14 +120,22 @@ int main(const int argc, const char** argv)
 		root_dir_path.assign(root_dir);
 	}
 
-	for (const auto& application_name : { L"fileusage.exe", L"fileusage-demo.exe" })
+	bool cold_cache_success{};
+
+	for (const auto& application_name : { L"fileusage-demo.exe", L"fileusage.exe"})
 	{
+		// make sures at least fileusage runs cold first, or fileusage-demo.exe if fileusage is not found. Only one cold run will occur.
+		if(!cold_cache_success)
+			cold_cache_success = benchmark(wss, application_name, argc, root_dir, true, true);
+
+		if (!cold_cache_success) continue;
+
 		benchmark(wss, application_name, argc, root_dir);
 	}
 
 	system("cls");
 
-	std::cout << "fileusage_benchmark {v1.0.0} (c) 2024, Jared Gajulin" << "\n";
+	std::cout << "fileusage-benchmark {v1.1.0} (c) 2024, Jared Gajulin" << "\n";
 	std::cout << "Root directory is: " << absolute(root_dir_path) << "\n\n";
 
 	std::wcout << wss.str();

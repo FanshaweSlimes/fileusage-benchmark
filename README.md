@@ -1,4 +1,7 @@
-### fileusage-benchmark
+# fileusage-benchmark
+
+### ⚠️ Warning ⚠️
+Cold caching can theoretically have the second program (the demo) access cache instead of actual read I/O, displaying inaccurate results. [See system file cache.](https://learn.microsoft.com/en-us/windows/win32/fileio/file-caching) For more fair results, this program will only benchmark the warm cache.
 
 ### Purpose
 This project provides a benchmark utility to directly compare the performance of the "fileusage" binary against a provided binary named "fileusage-demo". 

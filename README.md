@@ -32,34 +32,32 @@ The benchmark utility provides a clear textual output with the following:
 
 ### Example Output
 ```bash
-PS C:\Users\Jared Gajulin\Desktop\fileusage\x64\Release> .\fileusage-benchmark.exe c:\
-
-fileusage_benchmark {v1.0.0} (c) 2024, Jared Gajulin
+fileusage-benchmark {v1.1.0} (c) 2024, Jared Gajulin
 Root directory is: "c:\\"
-
-fileusage.exe:
-        Execution time info:
-                Nanoseconds: 43,691,260,900ns
-                Microseconds: 43,691,260us
-                Milliseconds: 43,691ms
-                Seconds: 43.6913s
-
-        Execution time info (cout disabled):
-                Nanoseconds: 4,520,855,500ns
-                Microseconds: 4,520,855us
-                Milliseconds: 4,520ms
-                Seconds: 4.52086s
 
 fileusage-demo.exe:
         Execution time info:
-                Nanoseconds: 56,522,698,500ns
-                Microseconds: 56,522,698us
-                Milliseconds: 56,522ms
-                Seconds: 56.5227s
+                Nanoseconds: 34,725,013,100ns
+                Microseconds: 34,725,013us
+                Milliseconds: 34,725ms
+                Seconds: 34.725s
 
         Execution time info (cout disabled):
-                Nanoseconds: 22,174,823,400ns
-                Microseconds: 22,174,823us
-                Milliseconds: 22,174ms
-                Seconds: 22.1748s
+                Nanoseconds: 20,511,902,600ns
+                Microseconds: 20,511,902us
+                Milliseconds: 20,511ms
+                Seconds: 20.5119s
+
+fileusage.exe:
+        Execution time info:
+                Nanoseconds: 15,225,695,400ns
+                Microseconds: 15,225,695us
+                Milliseconds: 15,225ms
+                Seconds: 15.2257s
+
+        Execution time info (cout disabled):
+                Nanoseconds: 3,924,636,400ns
+                Microseconds: 3,924,636us
+                Milliseconds: 3,924ms
+                Seconds: 3.92464s
 ```
